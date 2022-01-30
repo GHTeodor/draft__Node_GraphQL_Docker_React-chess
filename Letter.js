@@ -21,7 +21,7 @@ form.onsubmit = function (event) {
 
     async function async() {
         try {
-            for (let i = 0, j = 'async' + i; i < hW.length; i++) {
+            for (let i = 0; i < hW.length; i++) {
                 function letter0(hw = hW[i]) {
                     return new Promise((resolve, reject) => {
                         setTimeout(() => {
@@ -38,7 +38,7 @@ form.onsubmit = function (event) {
                     });
                 }
 
-                j = await letter0();
+                await letter0();
             }
         } catch (e) {
             console.error(e);
