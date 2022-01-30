@@ -47,4 +47,3 @@ form.onsubmit = function (event) {
 
     async();
 };
-
