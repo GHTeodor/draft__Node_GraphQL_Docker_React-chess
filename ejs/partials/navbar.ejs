@@ -1,0 +1,10 @@
+<nav class="navbar navbar-light bg-light">
+    <form class="container-fluid justify-content-start">
+        <a class="nav-link <% if (active === 'main') { %>active<% } %>" href="/">
+            <button class="btn btn-outline-success me-2" type="button">Main</button>
+        </a>
+        <a class="nav-link <% if (active === 'features') { %>active<% } %>" href="/features">
+            <button class="btn btn-sm btn-outline-secondary" type="button">Features</button>
+        </a>
+    </form>
+</nav>
