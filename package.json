@@ -4,6 +4,8 @@
   "description": "",
   "main": "App.js",
   "scripts": {
+    "serve": "nodemon App.js",
+    "start": "node App.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -20,5 +22,8 @@
   "dependencies": {
     "express": "^4.17.3",
     "express-handlebars": "^6.0.2"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.15"
   }
 }
