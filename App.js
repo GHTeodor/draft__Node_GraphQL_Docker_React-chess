@@ -20,12 +20,10 @@ app.use(logger);
 
 app.use(serverRoutes);
 
-app.get('/', (req, res) => {
-    res.render('index', {title: "Main page", active: "main"});
-});
-app.get('/features', (req, res) => {
-    res.render('features', {title: "Features page", active: "features"});
-});
+app.get('/', (req, res) =>
+    res.render('index', {title: "Main page", active: "main"}));
+app.get('/features', (req, res) =>
+    res.render('features', {title: "Features page", active: "features"}));
 
 
 // app.get('/', (req, res) => {
@@ -42,6 +40,4 @@ app.get('/features', (req, res) => {
 //     res.download(path.resolve(__dirname, 'static', 'index.html'));
 // });
 
-app.listen(PORT, () => {
-    console.log(`Server has been started on port ${PORT}...`);
-});
+app.listen(PORT, () => console.log(`Server has been started on port ${PORT}...`));
