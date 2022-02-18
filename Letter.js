@@ -26,14 +26,9 @@ form.onsubmit = function (event) {
                     return new Promise((resolve, reject) => {
                         setTimeout(() => {
                             if (hw) {
-                                if (hw === " ")
-                                    h1.innerHTML += "<i>&nbsp;</i>";
-                                else
-                                    h1.innerText += hw;
+                                (hw === " ") ? h1.innerHTML += "<i>&nbsp;</i>" : h1.innerText += hw;
                                 return resolve(hw);
-                            } else {
-                                return reject('Щось не так');
-                            }
+                            } else return reject('Щось не так');
                         }, Math.ceil(Math.random() * (100 - 99) + 99));
                     });
                 }
