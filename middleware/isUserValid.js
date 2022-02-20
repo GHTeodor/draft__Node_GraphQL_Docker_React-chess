@@ -1,8 +1,8 @@
 function isUserValid({body}, res, next) {
     try {
-        const {login, password} = body;
+        const {email, password} = body;
 
-        if (!login || !password)
+        if (!email || !password)
             throw new Error('Login or password is not provided');
 
         if (password.length <= 6)

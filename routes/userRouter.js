@@ -6,6 +6,8 @@ const userRouter = Router();
 
 userRouter.get('/', userController.renderUsers);
 
-userRouter.get('/:userId', userController.getUserByID);
+userRouter.post('/:userId', userController.getUserByID);
+
+userRouter.get('/:userId', userController.getUserByQuery);
 
 module.exports = userRouter;
