@@ -2,9 +2,9 @@ import {
     DeleteResult, EntityRepository, getManager, Repository, UpdateResult,
 } from 'typeorm';
 
-import { IComment } from '../../entities/interfaces/IComment';
+import { IComment } from '../../entities/interfaces';
 import { ICommentRepository } from './ICommentRepository';
-import { Comment } from '../../entities/comment';
+import { Comment } from '../../entities';
 
 @EntityRepository(Comment)
 class CommentRepository extends Repository<Comment> implements ICommentRepository {
@@ -33,4 +33,4 @@ class CommentRepository extends Repository<Comment> implements ICommentRepositor
     }
 }
 
-export default new CommentRepository();
+export const commentRepository = new CommentRepository();

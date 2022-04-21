@@ -1,11 +1,11 @@
 import { Request, Response } from 'express';
 import { DeleteResult, UpdateResult } from 'typeorm';
 
-import userService from '../services/userService';
-import { IUser } from '../entities/interfaces/IUser';
+import { IUser } from '../entities/interfaces';
+import { userService } from '../services';
 
 class UserController {
-    public async getUsers(req: Request, res: Response): Promise<any> {
+    public async getUsers(req: Request, res: Response): Promise<void> {
         const users = await userService.getUsers();
         return res.render('users', { users });
     }
@@ -35,4 +35,4 @@ class UserController {
     }
 }
 
-export default new UserController();
+export const userController = new UserController();

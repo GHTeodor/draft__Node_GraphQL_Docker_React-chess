@@ -1,7 +1,7 @@
 import { DeleteResult, UpdateResult } from 'typeorm';
 
-import commentRepository from '../repositories/comment/commentRepository';
-import { IComment } from '../entities/interfaces/IComment';
+import { IComment } from '../entities/interfaces';
+import { commentRepository } from '../repositories';
 
 class CommentService {
     public async getComments(): Promise<IComment[]> {
@@ -25,4 +25,4 @@ class CommentService {
     }
 }
 
-export default new CommentService();
+export const commentService = new CommentService();

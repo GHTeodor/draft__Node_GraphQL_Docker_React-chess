@@ -2,8 +2,8 @@ import {
     DeleteResult, EntityRepository, getManager, Repository, UpdateResult,
 } from 'typeorm';
 
-import { Post } from '../../entities/post';
-import { IPost } from '../../entities/interfaces/IPost';
+import { Post } from '../../entities';
+import { IPost } from '../../entities/interfaces';
 import { IPostRepository } from './IPostRepository';
 
 @EntityRepository(Post)
@@ -33,4 +33,4 @@ class PostRepository extends Repository<Post> implements IPostRepository {
     }
 }
 
-export default new PostRepository();
+export const postRepository = new PostRepository();

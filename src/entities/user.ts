@@ -1,9 +1,9 @@
 import { Column, Entity, OneToMany } from 'typeorm';
 
 import { CommonFields } from './commonFields';
-import { IUser } from './interfaces/IUser';
+import { IUser } from './interfaces';
 import { Post } from './post';
-import { config } from '../configs/config';
+import { config } from '../configs';
 
 @Entity('Users', { database: config.MySQL_DB_NAME })
 export class User extends CommonFields implements IUser {

@@ -1,11 +1,11 @@
 import { Response, Request } from 'express';
 import { DeleteResult, UpdateResult } from 'typeorm';
 
-import commentService from '../services/commentService';
-import { IComment } from '../entities/interfaces/IComment';
+import { IComment } from '../entities/interfaces';
+import { commentService } from '../services';
 
 class CommentController {
-    public async getComments(req: Request, res: Response): Promise<any> {
+    public async getComments(req: Request, res: Response): Promise<void> {
         const comments = await commentService.getComments();
         return res.render('comments', { comments });
     }
@@ -35,4 +35,4 @@ class CommentController {
     }
 }
 
-export default new CommentController();
+export const commentController = new CommentController();

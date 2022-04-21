@@ -1,11 +1,11 @@
 import { Response, Request } from 'express';
 import { DeleteResult, UpdateResult } from 'typeorm';
 
-import postService from '../services/postService';
-import { IPost } from '../entities/interfaces/IPost';
+import { IPost } from '../entities/interfaces';
+import { postService } from '../services';
 
 class PostController {
-    public async getPosts(req: Request, res: Response): Promise<any> {
+    public async getPosts(req: Request, res: Response): Promise<void> {
         const posts = await postService.getPosts();
         return res.render('posts', { posts });
     }
@@ -35,4 +35,4 @@ class PostController {
     }
 }
 
-export default new PostController();
+export const postController = new PostController();

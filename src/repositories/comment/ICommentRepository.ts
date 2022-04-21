@@ -1,6 +1,6 @@
 import { DeleteResult, UpdateResult } from 'typeorm';
 
-import { IComment } from '../../entities/interfaces/IComment';
+import { IComment } from '../../entities/interfaces';
 
 export interface ICommentRepository {
     getComments(): Promise<IComment[]>;

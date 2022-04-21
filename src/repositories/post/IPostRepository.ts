@@ -1,6 +1,6 @@
 import { DeleteResult, UpdateResult } from 'typeorm';
 
-import { IPost } from '../../entities/interfaces/IPost';
+import { IPost } from '../../entities/interfaces';
 
 export interface IPostRepository {
     getPosts(): Promise<IPost[]>;

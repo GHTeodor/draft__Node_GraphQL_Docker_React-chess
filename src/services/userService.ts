@@ -1,8 +1,8 @@
 import { DeleteResult, UpdateResult } from 'typeorm';
 import bcrypt from 'bcrypt';
 
-import { IUser } from '../entities/interfaces/IUser';
-import userRepository from '../repositories/user/userRepository';
+import { IUser } from '../entities/interfaces';
+import { userRepository } from '../repositories';
 
 class UserService {
     public async getUsers(): Promise<IUser[]> {
@@ -33,4 +33,4 @@ class UserService {
     }
 }
 
-export default new UserService();
+export const userService = new UserService();

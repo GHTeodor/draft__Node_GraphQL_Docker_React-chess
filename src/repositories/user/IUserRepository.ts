@@ -1,6 +1,6 @@
 import { DeleteResult, UpdateResult } from 'typeorm';
 
-import { IUser } from '../../entities/interfaces/IUser';
+import { IUser } from '../../entities/interfaces';
 
 export interface IUserRepository {
     getUsers(): Promise<IUser[]>;

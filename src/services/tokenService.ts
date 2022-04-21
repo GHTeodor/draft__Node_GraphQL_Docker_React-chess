@@ -1,8 +1,9 @@
 import jwt from 'jsonwebtoken';
 
-import { config } from '../configs/config';
-import { IToken } from '../entities/interfaces/IToken';
-import tokenRepository from '../repositories/token/tokenRepository';
+import { config } from '../configs';
+import { IToken } from '../entities/interfaces';
+import { tokenRepository } from '../repositories';
+import { IUserPayload } from '../interfaces';
 
 class TokenService {
     public async generateTokenPair(payload: any)
@@ -21,9 +22,20 @@ class TokenService {
             tokenFromDB.refreshToken = refreshToken;
             return tokenRepository.createToken(tokenFromDB);
         }
-        const token = await tokenRepository.createToken({ refreshToken, userId });
-        return token;
+        return tokenRepository.createToken({ refreshToken, userId });
+    }
+
+    public async deleteUserTokenPair(userId: number) {
+        return tokenRepository.deleteByParams({ userId });
+    }
+
+    verifyToken(authToken: string, tokenType: string = 'access'): IUserPayload {
+        let secretWord = config.SECRET_ACCESS_KEY;
+
+        if (tokenType === 'refresh') secretWord = config.SECRET_REFRESH_KEY;
+
+        return jwt.verify(authToken, secretWord as string) as IUserPayload;
     }
 }
 
-export default new TokenService();
+export const tokenService = new TokenService();

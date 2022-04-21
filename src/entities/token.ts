@@ -3,9 +3,9 @@ import {
 } from 'typeorm';
 
 import { CommonFields } from './commonFields';
-import { IToken } from './interfaces/IToken';
+import { IToken } from './interfaces';
 import { User } from './user';
-import { config } from '../configs/config';
+import { config } from '../configs';
 
 @Entity('Tokens', { database: config.MySQL_DB_NAME })
 export class Token extends CommonFields implements IToken {

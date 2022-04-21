@@ -4,7 +4,7 @@ import path from 'path';
 import { createConnection } from 'typeorm';
 import { engine } from 'express-handlebars';
 
-import { config } from './configs/config';
+import { config } from './configs';
 import { apiRouter } from './routers/apiRouter';
 
 const app = express();

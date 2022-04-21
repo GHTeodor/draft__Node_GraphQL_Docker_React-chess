@@ -2,8 +2,8 @@ import {
     DeleteResult, EntityRepository, getManager, Repository, UpdateResult,
 } from 'typeorm';
 
-import { IUser } from '../../entities/interfaces/IUser';
-import { User } from '../../entities/user';
+import { IUser } from '../../entities/interfaces';
+import { User } from '../../entities';
 import { IUserRepository } from './IUserRepository';
 
 @EntityRepository(User)
@@ -33,4 +33,4 @@ class UserRepository extends Repository<User> implements IUserRepository {
     }
 }
 
-export default new UserRepository();
+export const userRepository = new UserRepository();

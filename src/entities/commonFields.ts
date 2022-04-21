@@ -2,7 +2,7 @@ import {
     Column, CreateDateColumn, DeleteDateColumn, PrimaryGeneratedColumn,
 } from 'typeorm';
 
-import { ICommonFields } from './interfaces/ICommonFields';
+import { ICommonFields } from './interfaces';
 
 export class CommonFields implements ICommonFields {
     @PrimaryGeneratedColumn()

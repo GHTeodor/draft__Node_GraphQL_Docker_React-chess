@@ -1,7 +1,7 @@
 import { DeleteResult, UpdateResult } from 'typeorm';
 
-import postRepository from '../repositories/post/postRepository';
-import { IPost } from '../entities/interfaces/IPost';
+import { IPost } from '../entities/interfaces';
+import { postRepository } from '../repositories';
 
 class PostService {
     public async getPosts(): Promise<IPost[]> {
@@ -25,4 +25,4 @@ class PostService {
     }
 }
 
-export default new PostService();
+export const postService = new PostService();

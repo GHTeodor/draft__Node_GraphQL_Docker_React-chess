@@ -1,6 +1,6 @@
-import userService from './userService';
-import { IUser } from '../entities/interfaces/IUser';
-import tokenService from './tokenService';
+import { IUser } from '../entities/interfaces';
+import { userService } from './userService';
+import { tokenService } from './tokenService';
 
 class AuthService {
     public async registration(body: IUser) {
@@ -24,4 +24,4 @@ class AuthService {
     }
 }
 
-export default new AuthService();
+export const authService = new AuthService();

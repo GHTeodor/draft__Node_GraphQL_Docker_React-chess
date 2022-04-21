@@ -3,8 +3,8 @@ import {
 } from 'typeorm';
 
 import { CommonFields } from './commonFields';
-import { config } from '../configs/config';
-import { IComment } from './interfaces/IComment';
+import { config } from '../configs';
+import { IComment } from './interfaces';
 import { Post } from './post';
 
 @Entity('Comments', { database: config.MySQL_DB_NAME })
