@@ -1,16 +1,18 @@
 import { Request, Response } from 'express';
 
-import { authService, tokenService } from '../services';
+import { authService, tokenService, userService } from '../services';
 import { IRequestExtended, ITokenData } from '../interfaces';
 import { IUser } from '../entities/interfaces';
+import { tokenRepository } from '../repositories';
+import { constant, COOKIE } from '../configs';
 
 class AuthController {
     public async registration(req: Request, res: Response): Promise<Response<ITokenData>> {
         const data = await authService.registration(req.body);
         res.cookie(
-            'refreshToken',
+            COOKIE.nameRefreshToken,
             data.refreshToken,
-            { maxAge: 24 * 60 * 60 * 1000, httpOnly: true },
+            { maxAge: COOKIE.maxAgeRefreshToken, httpOnly: true },
         );
         return res.json(data);
     }
@@ -18,20 +20,54 @@ class AuthController {
     public async logout(req: IRequestExtended, res: Response): Promise<Response<string>> {
         const { id } = req.user as IUser;
 
-        res.clearCookie('refreshToken');
+        res.clearCookie(COOKIE.nameRefreshToken);
 
         await tokenService.deleteUserTokenPair(id);
 
         return res.json('Logout OK');
     }
 
-    // public async login(req: Request, res: Response) {
-    //
-    // }
+    public async login(req: IRequestExtended, res: Response) {
+        try {
+            const { id, email, password: hashPassword } = req.user as IUser;
+            const { password } = req.body;
 
-    // public async refresh(req: Request, res: Response) {
-    //
-    // }
+            await userService.compareUserPasswords(password, hashPassword);
+
+            const { refreshToken, accessToken } = tokenService.generateTokenPair({ userId: id, userEmail: email });
+
+            await tokenRepository.createToken({ refreshToken, accessToken, userId: id });
+
+            res.json({
+                refreshToken,
+                accessToken,
+                user: req.user,
+            });
+        } catch ({ message }) {
+            res.status(400).json(message);
+        }
+    }
+
+    public async refreshToken(req: IRequestExtended, res: Response) {
+        try {
+            const { id, email } = req.user as IUser;
+            const refreshTokenToDelete = req.get(constant.AUTHORIZATION);
+
+            await tokenService.deleteTokenPairByParams({ refreshToken: refreshTokenToDelete });
+
+            const { refreshToken, accessToken } = await tokenService.generateTokenPair({ userId: id, userEmail: email });
+
+            await tokenRepository.createToken({ refreshToken, accessToken, userId: id });
+
+            res.json({
+                refreshToken,
+                accessToken,
+                user: req.user,
+            });
+        } catch ({ message }) {
+            res.status(400).json(message);
+        }
+    }
 }
 
 export const authController = new AuthController();

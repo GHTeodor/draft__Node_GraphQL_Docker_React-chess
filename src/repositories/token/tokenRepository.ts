@@ -5,11 +5,16 @@ import {
 import { IToken } from '../../entities/interfaces';
 import { Token } from '../../entities';
 import { ITokenRepository } from './ITokenRepository';
+import { ITokenDataToSave } from '../../interfaces';
 
 @EntityRepository(Token)
 class TokenRepository extends Repository<Token> implements ITokenRepository {
-    public async createToken(token: any): Promise<IToken> {
+    public async createToken(token: ITokenDataToSave): Promise<IToken> {
         return getManager().getRepository(Token).save(token);
+    }
+
+    public findByParams(filterObject: Partial<IToken>): Promise<IToken | undefined> {
+        return getManager().getRepository(Token).findOne(filterObject);
     }
 
     public async findTokenByUserId(userId: number): Promise<IToken | undefined> {
