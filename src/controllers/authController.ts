@@ -1,10 +1,12 @@
-import { Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 
-import { authService, tokenService, userService } from '../services';
+import {
+    authService, emailService, tokenService, userService,
+} from '../services';
 import { IRequestExtended, ITokenData } from '../interfaces';
 import { IUser } from '../entities/interfaces';
 import { tokenRepository } from '../repositories';
-import { constant, COOKIE } from '../configs';
+import { constant, COOKIE, EmailActionEnum } from '../configs';
 
 class AuthController {
     public async registration(req: Request, res: Response): Promise<Response<ITokenData>> {
@@ -27,10 +29,12 @@ class AuthController {
         return res.json('Logout OK');
     }
 
-    public async login(req: IRequestExtended, res: Response) {
+    public async login(req: IRequestExtended, res: Response, next: NextFunction) {
         try {
             const { id, email, password: hashPassword } = req.user as IUser;
             const { password } = req.body;
+
+            await emailService.sendMail(email, EmailActionEnum.WELCOME, { userName: 'NodeMailer' });
 
             await userService.compareUserPasswords(password, hashPassword);
 
@@ -43,12 +47,12 @@ class AuthController {
                 accessToken,
                 user: req.user,
             });
-        } catch ({ message }) {
-            res.status(400).json(message);
+        } catch (e) {
+            next(e);
         }
     }
 
-    public async refreshToken(req: IRequestExtended, res: Response) {
+    public async refreshToken(req: IRequestExtended, res: Response, next: NextFunction) {
         try {
             const { id, email } = req.user as IUser;
             const refreshTokenToDelete = req.get(constant.AUTHORIZATION);
@@ -64,8 +68,8 @@ class AuthController {
                 accessToken,
                 user: req.user,
             });
-        } catch ({ message }) {
-            res.status(400).json(message);
+        } catch (e) {
+            next(e);
         }
     }
 }
