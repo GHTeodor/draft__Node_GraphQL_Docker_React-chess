@@ -13,6 +13,10 @@ class UserService {
         return userRepository.getUserByEmail(email);
     }
 
+    public async getUserPagination(filterObject: any, page: number, perPage: number) {
+        return userRepository.getUserPagination({ email: 'pagination@gmail.com' }, perPage, page);
+    }
+
     public async compareUserPasswords(password: string, hash: string): Promise<void | Error> {
         const isPasswordUnique = await bcrypt.compare(password, hash);
 

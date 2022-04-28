@@ -1,11 +1,13 @@
 import 'reflect-metadata';
 import express from 'express';
+import mongoose from 'mongoose';
 import path from 'path';
 import { createConnection } from 'typeorm';
 import { engine } from 'express-handlebars';
 
 import { config } from './configs';
 import { apiRouter } from './routers/apiRouter';
+// import { cronRun } from './cron';
 
 const app = express();
 app.use(express.json());
@@ -26,12 +28,18 @@ app.use('*', (err, req, res, next) => {
     });
 });
 
-const { PORT } = config;
+const { PORT, MongoDB } = config;
 app.listen(PORT, async () => {
     console.log(`Server has been started on PORT: ${PORT} 🚀🚀🚀`);
     try {
-        const connection = await createConnection();
-        if (connection) console.log('MySQL DB connected');
+        const connectionMySQL = await createConnection();
+        if (connectionMySQL) {
+            console.log('MySQL is connected');
+            // await cronRun();
+        }
+
+        const connectionMongoDB = await mongoose.connect(MongoDB as string);
+        if (connectionMongoDB) console.log('MongoDB is connected');
     } catch (error) {
         if (error) console.log(error);
     }

@@ -35,7 +35,8 @@
         "newline-per-chained-call": ["error", {
             "ignoreChainWithDepth": 5
         }],
-        "no-shadow": "off"
+        "no-shadow": "off",
+        "func-names": "off"
     },
     "settings": {
         "import/resolver": {
