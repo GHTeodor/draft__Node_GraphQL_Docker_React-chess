@@ -3,6 +3,7 @@ import bcrypt from 'bcrypt';
 
 import { IUser } from '../entities/interfaces';
 import { userRepository } from '../repositories';
+import { IPaginationResponseInterface } from '../interfaces';
 
 class UserService {
     public async getUsers(): Promise<IUser[]> {
@@ -13,7 +14,7 @@ class UserService {
         return userRepository.getUserByEmail(email);
     }
 
-    public async getUserPagination(filterObject: any, page: number, perPage: number) {
+    public async getUserPagination(filterObject: any, page: number, perPage: number): Promise<IPaginationResponseInterface<IUser>> {
         return userRepository.getUserPagination({ email: 'pagination@gmail.com' }, perPage, page);
     }
 
