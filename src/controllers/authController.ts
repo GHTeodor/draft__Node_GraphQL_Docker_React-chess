@@ -1,22 +1,47 @@
 import { NextFunction, Request, Response } from 'express';
+import { UploadedFile } from 'express-fileupload';
 
 import {
-    authService, emailService, tokenService, userService,
+    authService, emailService, s3Service, tokenService, userService,
 } from '../services';
-import { IRequestExtended, ITokenData } from '../interfaces';
+import { IRequestExtended } from '../interfaces';
 import { IUser } from '../entities/interfaces';
 import { tokenRepository } from '../repositories';
 import { constant, COOKIE, EmailActionEnum } from '../configs';
 
 class AuthController {
-    public async registration(req: Request, res: Response): Promise<Response<ITokenData>> {
-        const data = await authService.registration(req.body);
-        res.cookie(
-            COOKIE.nameRefreshToken,
-            data.refreshToken,
-            { maxAge: COOKIE.maxAgeRefreshToken, httpOnly: true },
-        );
-        return res.json(data);
+    public async registration(req: Request, res: Response, next: NextFunction): Promise<void> {
+        try {
+            const { email } = req.body;
+            const avatar = req.files?.avatar as UploadedFile;
+
+            const userFromDB = await userService.getUserByEmail(email);
+
+            if (userFromDB) throw new Error(`User with email: "${email}" already exists`);
+
+            const createdUser = await userService.createUser(req.body);
+
+            // UPLOAD PHOTO
+            if (avatar) {
+                const sendData = await s3Service.uploadFile(avatar, 'user', createdUser.id);
+
+                console.log('S3 Location:___________________________');
+                console.log(sendData.Location);
+                console.log('/S3 Location:___________________________');
+            }
+
+            // UPDATE USER
+
+            const tokenData = await authService.registration(createdUser);
+            res.cookie(
+                COOKIE.nameRefreshToken,
+                tokenData.refreshToken,
+                { maxAge: COOKIE.maxAgeRefreshToken, httpOnly: true },
+            );
+            res.json(tokenData);
+        } catch (e) {
+            next(e);
+        }
     }
 
     public async logout(req: IRequestExtended, res: Response): Promise<Response<string>> {
