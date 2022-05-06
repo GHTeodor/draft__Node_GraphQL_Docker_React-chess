@@ -1,11 +1,12 @@
 {
-  "name": "node.june-2021",
+  "name": "june-2021",
   "version": "1.0.0",
   "scripts": {
     "serve": "nodemon app.js",
     "start": "node app.js"
   },
   "dependencies": {
+    "aws-sdk": "^2.1130.0",
     "bcrypt": "^5.0.1",
     "dotenv": "^16.0.0",
     "email-templates": "^9.0.0",
