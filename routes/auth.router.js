@@ -13,5 +13,6 @@ router.post('/login',
     authMiddleware.isPasswordMatched,
     authController.login);
 router.post('/logout', authController.logout);
+router.post('/refresh', authMiddleware.checkRefreshToken, authController.login);
 
 module.exports = router;

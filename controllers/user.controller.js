@@ -54,9 +54,9 @@ module.exports = {
         }
     },
 
-    removeUser: async (req, res, next) => {
+    deleteUserByAccessToken: async (req, res, next) => {
         try {
-            const removedUser = await User.findByIdAndDelete(req.params.user_id);
+            const removedUser = await User.findByIdAndDelete(req.user._id);
             res.json(removedUser);
         } catch (e) {
             next(e);
