@@ -1,5 +1,6 @@
 const User = require('../database/User');
 const userValidator = require('../validators/user.validator');
+const ErrorHandler = require("../errors/ErrorHandler");
 
 module.exports = {
     createUserMiddleware: async (req, res, next) => {
@@ -8,12 +9,31 @@ module.exports = {
             const foundUser = await User.findOne({email});
 
             if (foundUser) {
-                throw new Error(`Email: ${email} has already exist`);
+                throw new ErrorHandler(`Email: ${email} has already exist`, 404);
             }
 
             next();
         } catch (e) {
-            res.json(e.message);
+            next(e);
+        }
+    },
+
+    isUserPresent: async (req, res, next) => {
+        try {
+            const {email} = req.body;
+            const userByEmail = await User.findOne({email})
+                .select('+password')
+                .lean();
+
+            if (!userByEmail) {
+                throw new ErrorHandler(`Wrong email or password`, 418);
+            }
+
+            req.user = userByEmail;
+
+            next();
+        } catch (e) {
+            next(e);
         }
     },
 
@@ -29,7 +49,21 @@ module.exports = {
 
             next();
         } catch (e) {
-            res.json(e.message);
+            next(e);
         }
     },
+
+    checkUserRole: (roleArr = []) => (req, res, next) => {
+        try {
+            const {role} = req.user;
+
+            if (!roleArr.includes(role)) {
+                throw new Error('Access denied');
+            }
+
+            next();
+        } catch (e) {
+            next(e);
+        }
+    }
 };

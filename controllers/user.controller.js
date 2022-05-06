@@ -1,33 +1,37 @@
 const User = require('../database/User');
 const passwordService = require('../services/password.service');
-const userUtil = require('../utils/user.util');
+const {userNormalizator} = require('../utils/user.util');
 
 module.exports = {
-    getUsers: async (req, res) => {
+    getUsers: async (req, res, next) => {
         try {
             const users = await User.find({});
 
             res.json(users);
         } catch (e) {
-            res.json(e.message);
+            next(e);
         }
     },
 
-    getUserById: async (req, res) => {
+    getUserById: async (req, res, next) => {
         try {
             const {user_id} = req.params;
-            let user = await User.findById(user_id).lean();
+            let user = await User.findById(user_id)
+                // .select('name email') // show only name and email (and _id)
+                // .select('-password') // hide pass
+                // .select('+password') // show pass
+                .lean();
 
-            user = userUtil.userNormalizator(user);
+            user = userNormalizator(user);
 
 
             res.json(user);
         } catch (e) {
-            res.json(e.message);
+            next(e);
         }
     },
 
-    createUser: async (req, res) => {
+    createUser: async (req, res, next) => {
         try {
             const hashedPassword = await passwordService.hash(req.body.password);
 
@@ -37,25 +41,25 @@ module.exports = {
 
             res.json(newUser);
         } catch (e) {
-            res.json(e.message);
+            next(e);
         }
     },
 
-    updateUser: async (req, res) => {
+    updateUser: async (req, res, next) => {
         try {
             const updatedUser = await User.findByIdAndUpdate(req.params.user_id, req.body, { new: true });
             res.json(updatedUser);
         } catch (e) {
-            res.json(e.message);
+            next(e);
         }
     },
 
-    removeUser: async (req, res) => {
+    removeUser: async (req, res, next) => {
         try {
             const removedUser = await User.findByIdAndDelete(req.params.user_id);
             res.json(removedUser);
         } catch (e) {
-            res.json(e.message);
+            next(e);
         }
-    },
+    }
 };
