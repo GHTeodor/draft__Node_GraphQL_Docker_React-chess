@@ -1,6 +1,7 @@
 const User = require('../database/User');
-const passwordService = require('../services/password.service');
+const {passwordService, emailService} = require('../services');
 const {userNormalizator} = require('../utils/user.util');
+const {WELCOME} = require("../configs/email-action.enum");
 
 module.exports = {
     getUsers: async (req, res, next) => {
@@ -35,9 +36,10 @@ module.exports = {
         try {
             const hashedPassword = await passwordService.hash(req.body.password);
 
-            // req.body.password = hashedPassword;
+            await emailService.sendMail(req.body.email, WELCOME, { userName: req.body.name });
 
             const newUser = await User.create({ ...req.body, password: hashedPassword});
+            // req.body.password = hashedPassword;
 
             res.json(newUser);
         } catch (e) {
