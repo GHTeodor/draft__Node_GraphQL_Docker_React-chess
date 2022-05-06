@@ -1,6 +1,7 @@
 const O_Auth = require("../database/O_Auth");
 const { userNormalizator } = require("../utils/user.util");
 const { jwtService } = require("../services");
+const {AUTHORIZATION} = require("../configs/constants");
 
 module.exports = {
     login: async (req, res, next) => {
@@ -31,17 +32,14 @@ module.exports = {
         }
     },
 
-    logout: (req, res, next) => {
+    logout: async (req, res, next) => {
         try {
-            // const {user_id} = req.params;
-            // let user = await User.findById(user_id)
-            //     .select('name email')
-            //     .lean();
-            //
-            // user = userNormalizator(user);
-            //
-            //
-            // res.json(user);
+            const token = req.get(AUTHORIZATION);
+
+            await O_Auth.remove({
+                access_token: token
+            });
+            res.json('Logout successfully');
         } catch (e) {
             next(e);
         }
