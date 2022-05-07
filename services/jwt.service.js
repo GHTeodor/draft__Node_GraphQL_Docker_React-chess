@@ -51,6 +51,6 @@ module.exports = {
             default:
                 throw new ErrorHandler('Wrong token type', 500);
         }
-        return jwt.sign({}, secretWord, {expiresIn: '15m'});
+        return jwt.sign({}, secretWord, {expiresIn: '1d'});
     }
 };
