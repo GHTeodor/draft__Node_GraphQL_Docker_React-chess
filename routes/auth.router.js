@@ -16,4 +16,7 @@ router.post('/logout', authMiddleware.checkAccessToken, authController.logout);
 router.post('/refresh', authMiddleware.checkRefreshToken, authController.login);
 router.get('/activate/:token', authMiddleware.checkActivateToken, authController.activate);
 
+router.post('/password/forgot', authController.sendMailForgotPassword); // get email about reset password
+router.put('/password/forgot', authController.setNewPasswordAfterForgot); // change password
+
 module.exports = router;

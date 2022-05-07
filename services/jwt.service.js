@@ -3,6 +3,7 @@ const jwt = require('jsonwebtoken');
 const ErrorHandler = require("../errors/ErrorHandler");
 const {JWT_ACCESS_SECRET, JWT_REFRESH_SECRET, JWT_ACTION_SECRET} = require("../configs/config");
 const tokenTypeEnum = require("../configs/tokenType.enum");
+const {FORGOT_PASSWORD} = require("../configs/action-token-type.enum");
 
 module.exports = {
     generateTokenPair: () => {
@@ -39,4 +40,17 @@ module.exports = {
     },
 
     createActionToken: () => jwt.sign({}, JWT_ACTION_SECRET, {expiresIn: '1d'}),
+
+    generateActionToken: (actionTokenType) => {
+        let secretWord;
+
+        switch (actionTokenType) {
+            case FORGOT_PASSWORD:
+                secretWord = 'HELLO'; // TODO from config
+                break;
+            default:
+                throw new ErrorHandler('Wrong token type', 500);
+        }
+        return jwt.sign({}, secretWord, {expiresIn: '15m'});
+    }
 };
