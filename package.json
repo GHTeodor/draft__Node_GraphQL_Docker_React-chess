@@ -6,7 +6,6 @@
     "start": "node app.js"
   },
   "dependencies": {
-    "aws-sdk": "^2.1130.0",
     "bcrypt": "^5.0.1",
     "dotenv": "^16.0.0",
     "email-templates": "^9.0.0",

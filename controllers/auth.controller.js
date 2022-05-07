@@ -1,4 +1,5 @@
 const O_Auth = require("../database/O_Auth");
+const User = require("../database/User");
 const { userNormalizator } = require("../utils/user.util");
 const { jwtService } = require("../services");
 const {AUTHORIZATION} = require("../configs/constants");
@@ -43,5 +44,16 @@ module.exports = {
         } catch (e) {
             next(e);
         }
-    }
+    },
+
+    activate: async (req, res, next) => {
+        try {
+            const {_id} = req.user;
+            await User.updateOne({_id}, {is_active: true});
+
+            res.status(200).json('User is active');
+        } catch (e) {
+            next(e);
+        }
+    },
 };

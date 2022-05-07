@@ -28,6 +28,11 @@ const userSchema = new Schema({
             userRoles.ADMIN,
             userRoles.MANAGER
         ]
+    },
+    is_active: {
+        type: Boolean,
+        default: false,
+        required: true
     }
 }, { timestamps: true });
 

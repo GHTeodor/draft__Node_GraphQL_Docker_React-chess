@@ -1,7 +1,10 @@
 const User = require('../database/User');
-const {passwordService, emailService} = require('../services');
+const Action = require('../database/Action');
+const {passwordService, emailService, jwtService} = require('../services');
 const {userNormalizator} = require('../utils/user.util');
 const {WELCOME} = require("../configs/email-action.enum");
+const {ACTION} = require("../configs/tokenType.enum");
+const {PORT} = require("../configs/config");
 
 module.exports = {
     getUsers: async (req, res, next) => {
@@ -36,10 +39,13 @@ module.exports = {
         try {
             const hashedPassword = await passwordService.hash(req.body.password);
 
-            await emailService.sendMail(req.body.email, WELCOME, { userName: req.body.name });
-
-            const newUser = await User.create({ ...req.body, password: hashedPassword});
+            const newUser = await User.create({...req.body, password: hashedPassword});
             // req.body.password = hashedPassword;
+
+            const token = jwtService.createActionToken();
+            await Action.create({ token, type: ACTION, user_id: newUser._id });
+
+            await emailService.sendMail(req.body.email, WELCOME, {userName: req.body.name, PORT, token});
 
             res.json(newUser);
         } catch (e) {
