@@ -1,6 +1,6 @@
 const User = require('../database/User');
 const Action = require('../database/Action');
-const {emailService, jwtService, userService} = require('../services');
+const {emailService, jwtService, userService, s3Service} = require('../services');
 const {userNormalizator} = require('../utils/user.util');
 const {WELCOME} = require("../configs/email-action.enum");
 const {ACTION} = require("../configs/tokenType.enum");
@@ -39,11 +39,17 @@ module.exports = {
             // const hashedPassword = await passwordService.hash(req.body.password);
             // const newUser = await User.create({...req.body, password: hashedPassword});
             // req.body.password = hashedPassword;
-            const newUser = await User.createUserWithHashPassword(req.body); // userSchema.statics
+            let newUser = await User.createUserWithHashPassword(req.body); // userSchema.statics
 
 
             const token = jwtService.createActionToken();
             await Action.create({ token, type: ACTION, user_id: newUser._id });
+
+            if (req.files?.avatar) {
+                const uploadInfo = await s3Service.uploadImage(req.files.avatar, 'users', newUser._id.toString());
+
+                newUser = await User.findByIdAndUpdate(newUser._id, { avatar: uploadInfo.Location }, { new: true });
+            }
 
             await emailService.sendMail(req.body.email, WELCOME, {userName: req.body.name, PORT, token});
 

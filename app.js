@@ -1,6 +1,7 @@
 const cors = require('cors');
 const express = require('express');
 const rateLimit = require('express-rate-limit');
+const fileUpload = require('express-fileupload');
 const mongoose = require('mongoose');
 const helmet = require("helmet");
 const swaggerUi = require('swagger-ui-express');
@@ -43,6 +44,8 @@ app.use(cors({ origin: 'http://localhost:3000' })); // todo add in REACT ↓
 //     );
 // }
 //**************************************************************************
+
+app.use(fileUpload({}));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 

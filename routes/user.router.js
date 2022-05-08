@@ -1,10 +1,11 @@
 const router = require('express').Router();
 
 const {userController} = require("../controllers");
-const {userMiddleware, authMiddleware} = require("../middlewares");
+const {userMiddleware, authMiddleware, fileMiddleware} = require("../middlewares");
 
 router.post('/',
     userMiddleware.isUserBodyValid,
+    fileMiddleware.checkUserAvatar,
     userMiddleware.createUserMiddleware,
     userController.createUser);
 router.get('/', userController.getUsers);
