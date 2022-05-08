@@ -6,7 +6,7 @@ const helmet = require("helmet");
 
 const { authRouter, userRouter } = require('./routes');
 const {ALLOWED_ORIGIN, PORT, MONGO_CONNECT_URL, NODE_ENV} = require('./configs/config');
-const startCron = require('./cron');
+// const startCron = require('./cron');
 const ErrorHandler = require("./errors/ErrorHandler");
 const defaultAdmin = require("./utils/default-data.util");
 
@@ -15,7 +15,6 @@ mongoose.connect(MONGO_CONNECT_URL);
 const app = express();
 
 app.use(helmet());
-app.use(cors({ origin: _configureCors }));
 
 app.use(rateLimit({
     windowMs: 15 * 60 * 1000, // 15 minutes
@@ -28,8 +27,10 @@ if (NODE_ENV === 'dev') {
     app.use(morgan('dev'));
 }
 
+app.use(cors({ origin: _configureCors })); // add Headers > Origin > ALLOWED_ORIGIN
+
 //**************************************************************************
-// app.use(cors({ origin: 'http://localhost:3000' })); // todo add in REACT
+// app.use(cors({ origin: 'http://localhost:3000' })); // todo add in REACT ↓
 // function App() {
 //     const [users, setUsers] = useState([]);
 //
@@ -57,7 +58,7 @@ app.use('*', (err, req, res, next) => {
 app.listen(PORT, async () => {
     console.log('App listen ' + PORT);
     await defaultAdmin();
-    startCron();
+    // startCron();
 });
 
 function _configureCors(origin, callback) {
