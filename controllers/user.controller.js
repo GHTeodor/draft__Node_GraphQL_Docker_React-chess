@@ -1,6 +1,6 @@
 const User = require('../database/User');
 const Action = require('../database/Action');
-const {emailService, jwtService} = require('../services');
+const {emailService, jwtService, userService} = require('../services');
 const {userNormalizator} = require('../utils/user.util');
 const {WELCOME} = require("../configs/email-action.enum");
 const {ACTION} = require("../configs/tokenType.enum");
@@ -9,7 +9,7 @@ const {PORT} = require("../configs/config");
 module.exports = {
     getUsers: async (req, res, next) => {
         try {
-            const users = await User.find({});
+            const users = await userService.getAllUsers(req.query);
 
             res.json(users);
         } catch (e) {

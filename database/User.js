@@ -1,7 +1,7 @@
 const {Schema, model} = require('mongoose');
 
 const userRoles = require("../configs/user-roles.enum");
-const {passwordService} = require("../services");
+const {passwordService} = require("../services/password.service"); // not from index!!! problem on userController.getAllUsers
 
 const userSchema = new Schema({
     name: {
@@ -29,6 +29,9 @@ const userSchema = new Schema({
             userRoles.ADMIN,
             userRoles.MANAGER
         ]
+    },
+    age: {
+        type: Number
     },
     is_active: {
         type: Boolean,

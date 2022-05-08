@@ -3,6 +3,13 @@ const Joi = require('joi');
 const { EMAIL_REGEXP } = require('../configs/constants');
 const userRoles = require('../configs/user-roles.enum');
 
+// const userLanguageValidator = {
+//     fr: Joi.string(),
+//     sp: Joi.string(),
+//     js: Joi.string(),
+//     uk: Joi.string()
+// };
+
 const createUserValidator = Joi.object({
     name: Joi.string()
         .alphanum()
@@ -19,7 +26,8 @@ const createUserValidator = Joi.object({
         .min(8)
         .required(),
 
-    role: Joi.string().allow(...Object.values(userRoles))
+    role: Joi.string().allow(...Object.values(userRoles)),
+    // ...userLanguageValidator
 });
 
 module.exports = {

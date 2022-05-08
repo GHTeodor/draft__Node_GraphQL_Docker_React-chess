@@ -3,11 +3,12 @@ const express = require('express');
 const rateLimit = require('express-rate-limit');
 const mongoose = require('mongoose');
 const helmet = require("helmet");
+const swaggerUi = require('swagger-ui-express');
 
+const swaggerJson = require('./docs/swagger.json');
 const { authRouter, userRouter } = require('./routes');
-const {ALLOWED_ORIGIN, PORT, MONGO_CONNECT_URL, NODE_ENV} = require('./configs/config');
+const {PORT, MONGO_CONNECT_URL, NODE_ENV} = require('./configs/config');
 // const startCron = require('./cron');
-const ErrorHandler = require("./errors/ErrorHandler");
 const defaultAdmin = require("./utils/default-data.util");
 
 mongoose.connect(MONGO_CONNECT_URL);
@@ -27,10 +28,10 @@ if (NODE_ENV === 'dev') {
     app.use(morgan('dev'));
 }
 
-app.use(cors({ origin: _configureCors })); // add Headers > Origin > ALLOWED_ORIGIN
+// app.use(cors({ origin: _configureCors })); // add Headers > Origin > ALLOWED_ORIGIN
 
 //**************************************************************************
-// app.use(cors({ origin: 'http://localhost:3000' })); // todo add in REACT ↓
+app.use(cors({ origin: 'http://localhost:3000' })); // todo add in REACT ↓
 // function App() {
 //     const [users, setUsers] = useState([]);
 //
@@ -46,6 +47,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use('/auth', authRouter);
+app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerJson)); // https://petstore.swagger.io/?docExpansion=full
 app.use('/users', userRouter);
 // eslint-disable-next-line no-unused-vars
 app.use('*', (err, req, res, next) => {
@@ -61,13 +63,13 @@ app.listen(PORT, async () => {
     // startCron();
 });
 
-function _configureCors(origin, callback) {
-    const whiteList = ALLOWED_ORIGIN.split(';');
-
-    if (!whiteList.includes(origin)) {
-        return callback(new ErrorHandler('CORS is not allowed'), false);
-    }
-    if (NODE_ENV === 'dev') {
-        return callback(null, true);
-    }
-}
+// function _configureCors(origin, callback) {
+//     const whiteList = ALLOWED_ORIGIN.split(';');
+//
+//     if (!whiteList.includes(origin)) {
+//         return callback(new ErrorHandler('CORS is not allowed'), false);
+//     }
+//     if (NODE_ENV === 'dev') {
+//         return callback(null, true);
+//     }
+// }
