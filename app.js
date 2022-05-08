@@ -1,5 +1,6 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const cors = require('cors');
 
 const { authRouter, userRouter } = require('./routes');
 const {PORT, MONGO_CONNECT_URL} = require('./configs/config');
@@ -8,6 +9,17 @@ mongoose.connect(MONGO_CONNECT_URL);
 
 const app = express();
 
+app.use(cors({ origin: 'http://localhost:3000' })); // todo add in REACT
+// function App() {
+//     const [users, setUsers] = useState([]);
+//
+//     useEffect(() => {
+//         fetch('http://localhost:5200/users').then(value => value.json()).then(users => setUsers(users));
+//     }, []);
+//     return (
+//         users.map(value => <div key={value._id}>{value._id}>{value.fullName}</div>)
+//     );
+// }
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
