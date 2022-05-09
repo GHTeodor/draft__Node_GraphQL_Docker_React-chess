@@ -1,3 +1,5 @@
+const ObjectId = require('mongoose').Types.ObjectId;
+
 const User = require('../database/User');
 const Action = require('../database/Action');
 const {emailService, jwtService, userService, s3Service} = require('../services');
@@ -19,6 +21,10 @@ module.exports = {
 
     getUserById: async (req, res, next) => {
         try {
+            if (!ObjectId.isValid(req.params.user_id)) {
+                throw new Error('Not valid Id');
+            }
+
             const {user_id} = req.params;
             let user = await User.findById(user_id)
                 // .select('name email') // show only name and email (and _id)
