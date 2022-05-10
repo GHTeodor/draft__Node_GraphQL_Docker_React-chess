@@ -17,6 +17,8 @@ services:
     image: mongo
     env_file:
       - db.env
+    ports:
+      - "27018:27017"
     restart: on-failure
     volumes:
       - ./mongo_db:/data/db
