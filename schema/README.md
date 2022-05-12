@@ -22,7 +22,7 @@ Find Posts:
     }
 }
 
-Migration: (Create Post)
+Migration (Create Post):
 mutation {
     addPosts(id:2, title: "New post", content: "Cool db relation", author: "Admin") {
         id,
