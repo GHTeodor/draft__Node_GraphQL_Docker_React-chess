@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="theme.css"/>
+    <title>Vue 1</title>
+</head>
+<body>
+<div class="container pt-5" id="app">
+    <div class="card center">
+        <h1 :style="{
+            color: inputValue.length < 5 ? 'darkred':'darkblue',
+            fontSize: inputValue.length < 6 ? '2rem' : '1.5rem'
+        }">{{title}}</h1>
+        <div class="form-control">
+            <input type="text"
+                   :placeholder="placeholderString"
+                   v-model="inputValue"
+                   @keypress.enter="addNewNote"/>
+        </div>
+        <h2>inputValue: {{inputValue}}</h2>
+        <button class="btn" @click="addNewNote">{{placeholderString}}</button>
+        <hr/>
+        <ul class="list" v-if="notes.length !== 0">
+            <li class="list-item" v-for="(note, index) in notes">
+                <!--                class 'bold' is always (true), 'primary' only when length > 5 -->
+                <span :class="['bold', {'primary': note.length > 5}]">({{index + 1}}) {{toUpperCase(note)}}</span>
+                <button class="btn danger" @click="removeNote(index, $event)">remove</button>
+            </li>
+            <hr/>
+            <li><strong>There is {{notes.length}} note(s)</strong> | Double: {{doubleCountComputed}}</li>
+        </ul>
+        <div v-else>There are no notes yet. Write first</div>
+    </div>
+</div>
+
+<script src="https://unpkg.com/vue@3"></script>
+<script src="app_1.js"></script>
+</body>
+</html>
